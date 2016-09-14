@@ -75,14 +75,13 @@ public class VersionUpdateService extends Service {
                     builder1.setOngoing(true);
                     //取消右上角的时间显示
                     builder1.setShowWhen(true);
-                    builder1.setContentTitle( appName+"下载成功，点击安装");
+                    builder1.setContentTitle(appName + "下载成功，点击安装");
                     builder1.setOngoing(true);
                     builder1.setShowWhen(false);
                     Notification notification = builder1.build();
                     notification.contentIntent = pendingIntent;
                     notificationManager.notify(notification_id, notification);
                     stopService(updateIntent);
-
                     break;
                 case DOWN_ERROR:
                     NotificationCompat.Builder builder2 = new NotificationCompat.Builder(getBaseContext());
@@ -93,7 +92,7 @@ public class VersionUpdateService extends Service {
                     builder2.setOngoing(true);
                     //取消右上角的时间显示
                     builder2.setShowWhen(true);
-                    builder2.setContentTitle( appName+"下载失败");
+                    builder2.setContentTitle(appName + "下载失败");
                     //builder.setContentInfo(progress+"%");
                     builder2.setOngoing(true);
                     builder2.setShowWhen(false);
@@ -213,18 +212,41 @@ public class VersionUpdateService extends Service {
 
     @SuppressWarnings("deprecation")
     public void createNotification() {
+        notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(getBaseContext());
+        builder.setSmallIcon(iconId);
+        builder.setLargeIcon(BitmapFactory.decodeResource(getResources(), iconId));
+        builder.setAutoCancel(true);
+        builder.setOngoing(true);
+        contentView = new RemoteViews(getPackageName(), R.layout.layout_notification_item);
+        contentView.setImageViewResource(R.id.notificationImage,iconId);
+        contentView.setTextViewText(R.id.notificationTitle, appName + "正在下载");
+        contentView.setTextViewText(R.id.notificationPercent, "0%");
+        contentView.setProgressBar(R.id.notificationProgress, 100, 0, false);
+        builder.setContent(contentView);
+        builder.setTicker("开始下载");
+        notification = builder.build();
+        updateIntent = new Intent();
+        updateIntent.setClassName(getPackageName(), activityName);
+//        updateIntent = new Intent(this, MainActivity.class);
+        updateIntent.getPackage();
+        updateIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        pendingIntent = PendingIntent.getActivity(this, 0, updateIntent, 0);
+        notification.contentIntent = pendingIntent;
+        notificationManager.notify(notification_id, notification);
 
+/*
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notification = new Notification();
         notification.icon = iconId;
         // 这个参数是通知提示闪出来的值.
         notification.tickerText = "开始下载";
 
-        /***
+        *//***
          * 在这里我们用自定的view来显示Notification
-         */
+         *//*
         contentView = new RemoteViews(getPackageName(), R.layout.layout_notification_item);
-        contentView.setTextViewText(R.id.notificationTitle, appName+"正在下载");
+        contentView.setTextViewText(R.id.notificationTitle, appName + "正在下载");
         contentView.setTextViewText(R.id.notificationPercent, "0%");
         contentView.setProgressBar(R.id.notificationProgress, 100, 0, false);
 
@@ -237,7 +259,7 @@ public class VersionUpdateService extends Service {
         pendingIntent = PendingIntent.getActivity(this, 0, updateIntent, 0);
 
         notification.contentIntent = pendingIntent;
-        notificationManager.notify(notification_id, notification);
+        notificationManager.notify(notification_id, notification);*/
     }
 
     /***
