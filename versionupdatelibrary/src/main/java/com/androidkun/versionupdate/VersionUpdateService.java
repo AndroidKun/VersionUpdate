@@ -216,7 +216,7 @@ public class VersionUpdateService extends Service {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getBaseContext());
         builder.setSmallIcon(iconId);
         builder.setLargeIcon(BitmapFactory.decodeResource(getResources(), iconId));
-        builder.setAutoCancel(true);
+        builder.setAutoCancel(false);
         builder.setOngoing(true);
         contentView = new RemoteViews(getPackageName(), R.layout.layout_notification_item);
         contentView.setImageViewResource(R.id.notificationImage,iconId);
