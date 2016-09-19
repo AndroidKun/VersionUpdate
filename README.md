@@ -6,7 +6,7 @@
 ##集成步骤
 ### 1.bulid.gradle添加依赖库
 
-    compile 'com.androidkun:version_update:1.0.2'
+    compile 'com.androidkun:version_update:1.1.0'
 ### 2.调用下载方法并设置参数
 
     /**
@@ -16,6 +16,6 @@
      * @param appName           应用名称
      * @param url               下载地址
      * @param iconId            图标资源id
-     * @param activityReference 点击通知时跳转目标Activity类路径
+     * @param activityReference 点击通知时跳转到的Activity
      */ 
-    VersionUpdateService.beginUpdate(MainActivity.this,"Plants vs. Zombies",url,R.mipmap.icon,"com.androidkun.activity.MainActivity");
+    VersionUpdateService.beginUpdate(MainActivity.this,"Plants vs. Zombies",url,R.mipmap.icon,MainActivity.class);
