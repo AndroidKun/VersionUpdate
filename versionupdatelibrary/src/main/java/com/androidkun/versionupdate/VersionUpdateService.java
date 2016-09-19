@@ -40,7 +40,7 @@ public class VersionUpdateService extends Service {
     private static int iconId = -1;
     private static String appName;
     private static String downUrl;
-    private static String activityName;
+//    private static String activityName;
     private static String apkCachePath;
 
     private static final int DOWN_OK = 1; // 下载完成
@@ -55,6 +55,7 @@ public class VersionUpdateService extends Service {
     private String updateFile;
 
     private int notification_id = 0;
+    private static Class<?> mCls;
     /***
      * 更新UI
      */
@@ -114,14 +115,13 @@ public class VersionUpdateService extends Service {
 
     /**
      * 启动下载服务
-     *
-     * @param context           上下文
+     *  @param context           上下文
      * @param appName           应用名称
      * @param url               下载地址
      * @param iconId            图标资源id
-     * @param activityReference 点击通知时跳转目标Activity类路径
+     * @param cls 点击通知时跳转目标Activity
      */
-    public static void beginUpdate(Context context, String appName, String url, int iconId, String activityReference) {
+    public static void beginUpdate(Context context, String appName, String url, int iconId,  Class<?> cls) {
         if (context == null) {
             throw new RuntimeException(
                     "Can't beginUpdate when the context is null!");
@@ -134,7 +134,7 @@ public class VersionUpdateService extends Service {
             throw new RuntimeException(
                     "Can't beginUpdate when the url is null!");
         }
-        if (activityReference == null) {
+        if (cls == null) {
             throw new RuntimeException(
                     "Can't beginUpdate when the activityReference is null!");
         }
@@ -142,7 +142,8 @@ public class VersionUpdateService extends Service {
         updateIntent.putExtra(VersionUpdateService.APP_NAME, appName);
         updateIntent.putExtra(VersionUpdateService.URL, url);
         updateIntent.putExtra(VersionUpdateService.ICON_ID, iconId);
-        updateIntent.putExtra(VersionUpdateService.MAIN_ACTIVITY_REFERENCE, activityReference);
+        mCls = cls;
+//        updateIntent.putExtra(VersionUpdateService.MAIN_ACTIVITY_REFERENCE, activityReference);
         context.startService(updateIntent);
     }
 
@@ -154,7 +155,7 @@ public class VersionUpdateService extends Service {
                 downUrl = intent.getStringExtra(URL);
                 iconId = intent.getIntExtra(ICON_ID, -1);
                 Log.w("AAA", "iconId:" + iconId);
-                activityName = intent.getStringExtra(MAIN_ACTIVITY_REFERENCE);
+//                activityName = intent.getStringExtra(MAIN_ACTIVITY_REFERENCE);
                 apkCachePath = intent.getStringExtra(APK_CACHE_PATH);
 
                 // 创建文件
@@ -227,8 +228,8 @@ public class VersionUpdateService extends Service {
         builder.setTicker("开始下载");
         notification = builder.build();
         updateIntent = new Intent();
-        updateIntent.setClassName(getPackageName(), activityName);
-//        updateIntent = new Intent(this, MainActivity.class);
+//        updateIntent.setClassName(getPackageName(), activityName);
+        updateIntent = new Intent(this,mCls);
         updateIntent.getPackage();
         updateIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         pendingIntent = PendingIntent.getActivity(this, 0, updateIntent, 0);

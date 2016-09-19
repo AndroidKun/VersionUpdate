@@ -1,5 +1,6 @@
 package com.androidkun.versionupdatedemo;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -17,10 +18,12 @@ public class MainActivity extends AppCompatActivity {
 
         Button btn = (Button) findViewById(R.id.btn);
 
+        Intent intent = new Intent(this,MainActivity.class);
+
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                VersionUpdateService.beginUpdate(MainActivity.this,"Demo",url,R.mipmap.icon,"com.androidkun.versionupdatedemo.Main2Activity");
+                VersionUpdateService.beginUpdate(MainActivity.this,"Demo",url,R.mipmap.icon,MainActivity.class);
             }
         });
 
